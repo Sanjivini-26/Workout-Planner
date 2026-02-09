@@ -182,7 +182,7 @@ Make your changes, then submit a PR. 🙌
 
 MIT License
 
-Copyright (c) 2025 Sameer
+Copyright (c) 2025 Sanjivini
 ---
 
 ## 🙏 Acknowledgements
@@ -194,7 +194,7 @@ Copyright (c) 2025 Sameer
 
 ---
 
-> Created with ❤️ by Sameer Senapati
+> Created with ❤️ by Sanjivini Antil
 
 
 
