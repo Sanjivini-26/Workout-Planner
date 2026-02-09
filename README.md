@@ -14,9 +14,11 @@ An intelligent full-stack application that generates personalized workout plans 
 
 ## 📷 Preview
 
-><img width="1434" height="862" alt="image" src="https://github.com/user-attachments/assets/4c750ea4-d746-4ce2-a2a6-18cc9c61545c" />
+<img width="1902" height="871" alt="image" src="https://github.com/user-attachments/assets/0af1a86a-231b-4dc0-8fcc-9a5a241500f3" />
 
-> <img width="1436" height="891" alt="image" src="https://github.com/user-attachments/assets/e9170b62-0851-4611-92eb-1739ade85f74" />
+
+<img width="1897" height="866" alt="image" src="https://github.com/user-attachments/assets/04033c5e-fbd5-4e31-b211-be281c74e049" />
+
 
 
 ---
