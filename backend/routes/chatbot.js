@@ -1,43 +1,93 @@
 import express from "express";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 
 const router = express.Router();
+// 👇 ADD THIS LINE
+console.log("ENV KEY:", process.env.OPENAI_API_KEY);
 
-// Load API key from environment variable
-const API_KEY = "ENTER YOUR GOOGLE API KEY HERE"; // Replace with process.env.GOOGLE_API_KEY if using environment variables
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1"
+});
 
-if (!API_KEY) {
-  console.error("❌ ERROR: Google API key is missing.");
-  throw new Error("Google API key is missing.");
-}
-
-const genAI = new GoogleGenerativeAI(API_KEY);
 
 router.post("/", async (req, res) => {
+
   const { text } = req.body;
 
-  console.log("Received request body:", req.body);
-
   if (!text) {
-    return res.status(400).json({ success: false, message: "Text is required." });
+    return res.status(400).json({
+      success: false,
+      message: "Text is required."
+    });
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    // ✅ Corrected generateContent method
-    const result = await model.generateContent([{ text }]);
+    const systemPrompt = `
+You are a professional fitness trainer.
 
-    // ✅ Extract response safely
-    const response = result.response.text();
-    console.log(response);
-    res.json({ success: true, response });
+Generate a DAY-WISE workout plan ONLY in valid JSON.
+
+Format:
+
+{
+  "title": "",
+  "goal": "",
+  "weekly_plan": [
+    {
+      "day": "",
+      "focus": "",
+      "exercises": [
+        {
+          "name": "",
+          "sets": "",
+          "reps": ""
+        }
+      ]
+    }
+  ]
+}
+
+Rules:
+- Return ONLY JSON
+- No explanation
+`;
+
+    const completion = await client.chat.completions.create({
+      model: "llama-3.1-8b-instant",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: text }
+      ]
+    });
+
+    const raw = completion.choices[0].message.content;
+
+    let parsed;
+
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      parsed = raw; // fallback
+    }
+
+    res.json({
+      success: true,
+      response: parsed
+    });
+
   } catch (error) {
-    console.error("🔥 Error in /api/chatbot route:", error.stack);
-    res.status(500).json({ success: false, message: "Failed to generate content." });
+
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "AI generation failed"
+    });
+
   }
+
 });
 
 export default router;
-
-
